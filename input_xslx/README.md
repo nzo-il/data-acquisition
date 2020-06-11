@@ -1,0 +1,1 @@
+Downloaded from https://www.gov.il/he/departments/general/hovatdivuahnetunim
