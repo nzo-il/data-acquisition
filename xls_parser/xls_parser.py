@@ -6,22 +6,31 @@ from typing import List
 from typing import Dict
 from typing import Set
 
+
 class XlsParser:
     def __init__(self, filename: str, sheetname: str) -> None:
         self.input_filename = filename
         self.input_sheetname = sheetname
-        self.data = pandas.ExcelFile(filename)
-        self.s = self.data.parse(sheetname)
+        self.data = None
+        self.s = None
         self.limit = 50
+        self.col_len = None
+        self.row_len = None
         self.anchor = None
-        self.col_len = len(self.s.columns)
-        self.row_len = len(self.s.values)
         self.electric_data: Dict[str, List[float]] = {}
         self.electric_data_by_type: Dict[str, List[float]] = {}
         self.timestamps_len = None
         self.not_found: Set[str] = set()
         with open("inputs/mapping/mapping.json") as fh:
             self.mapping = json.loads(fh.read())
+
+    def read_excel_file(self):
+        if self.data is not None:
+            return
+        self.data = pandas.ExcelFile(self.input_filename)
+        self.s = self.data.parse(self.input_sheetname)
+        self.col_len = len(self.s.columns)
+        self.row_len = len(self.s.values)
 
     def get_anchor(self):
         for col in range(0, self.col_len):
@@ -77,7 +86,6 @@ class XlsParser:
 
         print("Didn't find %s" % self.not_found)
 
-
     def write_output(self):
         output_filename = re.sub(r"^inputs/", r"outputs/", self.input_filename)
         output_filename = re.sub(r"\.xlsx$", r".csv", output_filename)
@@ -87,28 +95,21 @@ class XlsParser:
 
         fh = open(output_filename, "w")
         row = "timestamp"
-        for electric_type in parser.electric_data_by_type:
+        for electric_type in self.electric_data_by_type:
             row += ", %s" % electric_type
         fh.write("%s\n" % row)
 
-        for count, timestamp in enumerate(parser.electric_data['timestamps']):
+        for count, timestamp in enumerate(self.electric_data['timestamps']):
             row = str(timestamp)
-            for electric_type in parser.electric_data_by_type:
-                row += ", %s" % parser.electric_data_by_type[electric_type][count]
+            for electric_type in self.electric_data_by_type:
+                row += ", %s" % self.electric_data_by_type[electric_type][count]
             fh.write("%s\n" % row)
         fh.close()
 
-
-filename = "inputs/2019/12_2019.xlsx"
-sheetname = 'לוח 2 ייצור ברוטו בפועל '
-
-parser = XlsParser(filename=filename, sheetname=sheetname)
-parser.get_anchor()
-parser.get_electric_data()
-parser.aggregate_by_type()
-parser.write_output()
-
-
-
-
+    def run(self):
+        self.read_excel_file()
+        self.get_anchor()
+        self.get_electric_data()
+        self.aggregate_by_type()
+        self.write_output()
 
