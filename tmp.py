@@ -2,9 +2,12 @@ import pandas
 import re
 import json
 import os
+from typing import List
+from typing import Dict
+from typing import Set
 
 class XlsParser:
-    def __init__(self, filename, sheetname):
+    def __init__(self, filename: str, sheetname: str) -> None:
         self.input_filename = filename
         self.input_sheetname = sheetname
         self.data = pandas.ExcelFile(filename)
@@ -13,10 +16,10 @@ class XlsParser:
         self.anchor = None
         self.col_len = len(self.s.columns)
         self.row_len = len(self.s.values)
-        self.electric_data = {}
-        self.electric_data_by_type = {}
+        self.electric_data: Dict[str, List[float]] = {}
+        self.electric_data_by_type: Dict[str, List[float]] = {}
         self.timestamps_len = None
-        self.not_found = set()
+        self.not_found: Set[str] = set()
         with open("inputs/mapping/mapping.json") as fh:
             self.mapping = json.loads(fh.read())
 
