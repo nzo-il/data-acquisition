@@ -73,7 +73,8 @@ class XlsParser:
     def aggregate_by_type(self):
         for name, electric_type in self.mapping.items():
             if electric_type not in self.electric_data_by_type:
-                self.electric_data_by_type[electric_type] = [0] * len(self.electric_data['timestamps'])
+                self.electric_data_by_type[electric_type] \
+                    = [0] * len(self.electric_data['timestamps'])
 
             if name not in self.electric_data:
                 self.not_found.add(name)
@@ -102,7 +103,8 @@ class XlsParser:
         for count, timestamp in enumerate(self.electric_data['timestamps']):
             row = str(timestamp)
             for electric_type in self.electric_data_by_type:
-                row += ", %s" % self.electric_data_by_type[electric_type][count]
+                row += ", %s" % \
+                       self.electric_data_by_type[electric_type][count]
             fh.write("%s\n" % row)
         fh.close()
 
@@ -112,4 +114,3 @@ class XlsParser:
         self.get_electric_data()
         self.aggregate_by_type()
         self.write_output()
-
