@@ -32,7 +32,7 @@ class XlsParser:
             output_file_name = re.sub(r"^inputs/", r"outputs/", self.file_name)
             output_file_name = re.sub(r"\.xlsx$", r".csv", output_file_name)
         else:
-            output_file_name = self.output_file
+            output_file_name = output_file
         self.output_file = output_file_name
         self.verbose_mode = True
         self.data = None
