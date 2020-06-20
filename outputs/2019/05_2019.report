@@ -1,52 +1,52 @@
 mapping_not_found_in_electric_data:
 ####################################################################################################
-NSRM_2
-RH-45
+HC-4
+IPP
+ASHALIM PLOT A
+NSRM_ST
+DSEA_STEAM
+HG-19
+PSP MAALE GILBOA - 1
+HG-58
 Ktura 2
-NaotHovav 2
+BIO GAS
+HG-37
+RH-45
 HG-568
+ES-12
 RH-89
+NaotHovav 2
 PSP MAALE GILBOA - 2
-HC-3
+HG-68
+HG-347
+NSRM_2
+ASHALIM PLOT B
 HG-47
 RH-345
-IPP
-NaotHovav 1
-BIO GAS
-PSP MAALE GILBOA - 1
-DSEA_STEAM
-HC-4
-ETGAL
-NSRM_ST
-ES-34
-ASHALIM PLOT A
-HG-347
-ZF-34
-ES-12
-HG-37
-NSRM_1
 RH-35
+ZF-34
+NSRM_1
+NaotHovav 1
 AT-34
-HG-58
-HG-68
-ASHALIM PLOT B
-HG-19
+ES-34
+ETGAL
+HC-3
 ####################################################################################################
 electric_data_not_found_in_mapping:
 ####################################################################################################
-AHSALIM PLOT A
-MAALE GILBOA U - 1
 GIVAT HAMORE  ST2
-OPC HADERA GT2
-Total Estimated PV Generation
-NaotHovav
-timestamps
-NSRM 1
-DSEA STEAM
-OPC HADERA ST
-OPC HADERA GT1
-NSRM ST
 MAALE GILBOA U - 2
+OPC HADERA ST
 AHSALIM PLOT B
+NSRM 1
+AHSALIM PLOT A
+OPC HADERA GT2
 NSRM 2
+MAALE GILBOA U - 1
 GIVAT HAMORE GT1
+NSRM ST
+Total Estimated PV Generation
+OPC HADERA GT1
+timestamps
+DSEA STEAM
+NaotHovav

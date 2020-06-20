@@ -12,7 +12,11 @@ from typing import Set
 def print_time(func):
     def wrapper(*args, **kwargs):
         start = time.time()
-        ret = func(*args, **kwargs)
+        try:
+            ret = func(*args, **kwargs)
+        except Exception as e:
+            print("method: [%s] raised exception [%s]" % (func.__name__, e))
+            raise e
         end = time.time()
         if args[0].verbose_mode:
             print("method '%s' took %.3f[sec] to complete"
@@ -22,7 +26,6 @@ def print_time(func):
 
 
 class XlsParser:
-    @print_time
     def __init__(self, file_name: str,
                  sheet_name: str,
                  output_file: str) -> None:
@@ -85,9 +88,10 @@ class XlsParser:
         for row in range(self.anchor[0] + 1, self.row_len):
             timestamp = self.s.iloc[row, self.anchor[1]]
             if str(timestamp) == "nan":
-                self.timestamps_len = len(self.electric_data[column_name])
                 break
             self.electric_data[column_name].append(timestamp)
+
+        self.timestamps_len = len(self.electric_data[column_name])
 
         for col in range(self.anchor[1] + 1, self.col_len):
             column_name = self.s.iloc[self.anchor[0], col]
@@ -152,20 +156,19 @@ class XlsParser:
             row = str(self.electric_data['timestamps'][idx])
             for electric_type in self.electric_data_by_type:
                 row += ", %s" % \
-                       (self.electric_data_by_type[electric_type][idx] +
-                        self.electric_data_by_type[electric_type][idx + 1])
+                       (sum(self.electric_data_by_type[electric_type][idx:idx + 2]))
             fh.write("%s\n" % row)
         fh.close()
 
         fh = open(re.sub(r"\.csv", ".report", self.output_file), "w")
         fh.write("mapping_not_found_in_electric_data:\n")
         fh.write("#" * 100 + "\n")
-        for name in self.mapping_not_found_in_electric_data:
+        for name in sorted(self.mapping_not_found_in_electric_data.keys()):
             fh.write("%s\n" % name)
         fh.write("#" * 100 + "\n")
         fh.write("electric_data_not_found_in_mapping:\n")
         fh.write("#" * 100 + "\n")
-        for name in self.electric_data_not_found_in_mapping:
+        for name in sorted(self.electric_data_not_found_in_mapping.keys()):
             fh.write("%s\n" % name)
         fh.close()
 
