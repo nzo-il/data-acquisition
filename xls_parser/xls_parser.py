@@ -49,8 +49,21 @@ class XlsParser:
         self.timestamps_len = None
         self.mapping_not_found_in_electric_data: Set[str] = set()
         self.electric_data_not_found_in_mapping: Set[str] = set()
-        with open("inputs/mapping/mapping.json") as fh:
-            self.mapping = json.loads(fh.read())
+        self.mapping: Dict[str, str] = {}
+
+    @print_time
+    def read_mapping_file(self):
+        fh = open("inputs/mapping/mapping.csv")
+        lines = fh.readlines()
+        for count, line in enumerate(lines):
+            line = line.rstrip("\n")
+            if count == 0:
+                continue
+            else:
+                tmp = line.split(",")
+                name = re.sub(r"^\s*|\s*$", "", tmp[0])
+                value = re.sub(r"^\s*|\s*$", "", tmp[1])
+                self.mapping[name] = value
 
     @print_time
     def read_excel_file(self):
@@ -163,17 +176,18 @@ class XlsParser:
         fh = open(re.sub(r"\.csv", ".report", self.output_file), "w")
         fh.write("mapping_not_found_in_electric_data:\n")
         fh.write("#" * 100 + "\n")
-        for name in sorted(self.mapping_not_found_in_electric_data.keys()):
+        for name in sorted(self.mapping_not_found_in_electric_data):
             fh.write("%s\n" % name)
         fh.write("#" * 100 + "\n")
         fh.write("electric_data_not_found_in_mapping:\n")
         fh.write("#" * 100 + "\n")
-        for name in sorted(self.electric_data_not_found_in_mapping.keys()):
+        for name in sorted(self.electric_data_not_found_in_mapping):
             fh.write("%s\n" % name)
         fh.close()
 
     @print_time
     def run(self):
+        self.read_mapping_file()
         self.read_excel_file()
         self.get_anchor()
         self.get_electric_data()
