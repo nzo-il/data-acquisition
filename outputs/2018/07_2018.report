@@ -1,0 +1,41 @@
+mapping_not_found_in_electric_data:
+####################################################################################################
+IPP
+ASHALIM PLOT A
+NSRM_ST
+DSEA_STEAM
+HG-19
+PSP MAALE GILBOA - 1
+HG-58
+Ktura 2
+BIO GAS
+HG-37
+RH-45
+HG-568
+ES-12
+RH-89
+NaotHovav 2
+PSP MAALE GILBOA - 2
+HG-68
+HG-347
+NSRM_2
+ASHALIM PLOT B
+HG-47
+RH-345
+RH-35
+ZF-34
+NSRM_1
+NEVE MIDBAR
+NaotHovav 1
+AT-34
+ES-34
+####################################################################################################
+electric_data_not_found_in_mapping:
+####################################################################################################
+NSRM 1
+NSRM 2
+NSRM ST
+Total Estimated PV Generation
+timestamps
+DSEA STEAM
+NaotHovav

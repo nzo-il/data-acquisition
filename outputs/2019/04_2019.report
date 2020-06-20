@@ -1,0 +1,48 @@
+mapping_not_found_in_electric_data:
+####################################################################################################
+HC-4
+IPP
+ASHALIM PLOT A
+NSRM_ST
+DSEA_STEAM
+HG-19
+PSP MAALE GILBOA - 1
+HG-58
+Ktura 2
+BIO GAS
+HG-37
+RH-45
+HG-568
+ES-12
+RH-89
+NaotHovav 2
+PSP MAALE GILBOA - 2
+HG-68
+HG-347
+NSRM_2
+ASHALIM PLOT B
+HG-47
+RH-345
+RH-35
+ZF-34
+NSRM_1
+NaotHovav 1
+AT-34
+ES-34
+ETGAL
+HC-3
+####################################################################################################
+electric_data_not_found_in_mapping:
+####################################################################################################
+OPC HADERA ST
+AHSALIM PLOT B
+NSRM 1
+AHSALIM PLOT A
+OPC HADERA GT2
+NSRM 2
+NSRM ST
+Total Estimated PV Generation
+OPC HADERA GT1
+timestamps
+DSEA STEAM
+NaotHovav
