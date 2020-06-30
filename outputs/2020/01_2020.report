@@ -1,10 +1,6 @@
 mapping_not_found_in_electric_data:
 ####################################################################################################
-ASHALIM PLOT A
-ASHALIM PLOT B
 AT-34
-BIO GAS
-DSEA_STEAM
 ES-12
 ES-34
 ETGAL
@@ -19,12 +15,6 @@ HG-58
 HG-68
 IPP
 Ktura 2
-NSRM_1
-NSRM_2
-NSRM_ST
-NaotHovav 1
-NaotHovav 2
-OPC
 PSP MAALE GILBOA - 1
 PSP MAALE GILBOA - 2
 RH-345
@@ -35,25 +25,12 @@ ZF-34
 ####################################################################################################
 electric_data_not_found_in_mapping:
 ####################################################################################################
-AHSALIM PLOT A
-AHSALIM PLOT B
-DSEA STEAM
 GIVAT HAMORE  ST2
 GIVAT HAMORE GT1
 MAALE GILBOA U - 1
 MAALE GILBOA U - 2
-NSRM 1
-NSRM 2
-NSRM ST
-NaotHovav
-OPC 
-OPC HADERA GT1
-OPC HADERA GT2
-OPC HADERA ST
 RAMAT GAVRIEL GT1
 RAMAT GAVRIEL ST2
 SUGAT GT1
 SUGAT ST2
-Total Estimated PV Generation
 ZEELIM PV
-timestamps

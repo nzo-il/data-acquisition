@@ -22,25 +22,33 @@ def print_time(func):
             print("method '%s' took %.3f[sec] to complete"
                   % (func.__name__, end - start))
         return ret
+
     return wrapper
 
 
 class XlsParser:
+    SKIP_LIST: Set[str] = set()
+    SKIP_LIST.add("Total Estimated PV Generation")
+    SKIP_LIST.add("timestamps")
+
+    REPLACE_LIST: Dict[str, str] = {"OPC HADERA GT1": "OPC", "OPC HADERA GT2": "OPC", "OPC HADERA ST": "OPC",
+                                    "NaotHovav 1": "NaotHovav", "NaotHovav 2": "NaotHovav"}
+
     def __init__(self, file_name: str,
                  sheet_name: str,
                  output_file: str) -> None:
-        self.file_name = file_name
-        self.sheet_name = sheet_name
+        self.file_name: str = file_name
+        self.sheet_name: str = sheet_name
         if output_file == '':
             output_file_name = re.sub(r"^inputs/", r"outputs/", self.file_name)
             output_file_name = re.sub(r"\.xlsx$", r".csv", output_file_name)
         else:
             output_file_name = output_file
-        self.output_file = output_file_name
-        self.verbose_mode = True
+        self.output_file: str = output_file_name
+        self.verbose_mode: bool = True
         self.data = None
         self.s = None
-        self.limit = 50
+        self.limit: int = 50
         self.col_len = None
         self.row_len = None
         self.anchor = None
@@ -63,6 +71,7 @@ class XlsParser:
                 tmp = line.split(",")
                 name = re.sub(r"^\s*|\s*$", "", tmp[0])
                 value = re.sub(r"^\s*|\s*$", "", tmp[1])
+                name = XlsParser.REPLACE_LIST.get(name, name)
                 self.mapping[name] = value
 
     @print_time
@@ -107,9 +116,10 @@ class XlsParser:
         self.timestamps_len = len(self.electric_data[column_name])
 
         for col in range(self.anchor[1] + 1, self.col_len):
-            column_name = self.s.iloc[self.anchor[0], col]
+            column_name = re.sub(r"^\s*|\s*$", "", str(self.s.iloc[self.anchor[0], col]))
             if str(column_name) == "nan":
                 continue
+            column_name = XlsParser.REPLACE_LIST.get(column_name, column_name)
             self.electric_data[column_name] = []
             start_row = self.anchor[0] + 1
             for row in range(start_row, start_row + self.timestamps_len):
@@ -118,18 +128,25 @@ class XlsParser:
     @print_time
     def populate_electric_data_not_found_in_mapping(self):
         for name in self.electric_data:
+            if name in XlsParser.SKIP_LIST:
+                continue
             if name not in self.mapping:
                 self.electric_data_not_found_in_mapping.add(name)
 
     @print_time
     def populate_mapping_not_found_in_electric_data(self):
         for name in self.mapping:
+            if name in XlsParser.SKIP_LIST:
+                continue
             if name not in self.electric_data:
                 self.mapping_not_found_in_electric_data.add(name)
 
     @print_time
     def aggregate_by_type(self):
         for name, electric_type in self.mapping.items():
+            if name in XlsParser.SKIP_LIST:
+                continue
+
             if electric_type not in self.electric_data_by_type:
                 self.electric_data_by_type[electric_type] \
                     = [0] * len(self.electric_data['timestamps'])
@@ -146,30 +163,36 @@ class XlsParser:
             os.makedirs(dir_name)
 
         fh = open(self.output_file, "w")
-        row = "timestamp"
+        row = "Timestamp, Sum"
         for electric_type in self.electric_data_by_type:
             row += ", %s" % electric_type
         fh.write("%s\n" % row)
 
         for count, timestamp in enumerate(self.electric_data['timestamps']):
-            row = str(timestamp)
+            row = ""
+            total = 0
             for electric_type in self.electric_data_by_type:
                 row += ", %s" % \
                        self.electric_data_by_type[electric_type][count]
+                total += self.electric_data_by_type[electric_type][count]
+            row = "%s, %s %s" % (str(timestamp), total, row)
             fh.write("%s\n" % row)
         fh.close()
 
         fh = open(re.sub(r"\.csv$", "_hour.csv", self.output_file), "w")
-        row = "timestamp"
+        row = "Timestamp, Sum"
         for electric_type in self.electric_data_by_type:
             row += ", %s" % electric_type
         fh.write("%s\n" % row)
 
         for idx in range(0, len(self.electric_data['timestamps']), 2):
-            row = str(self.electric_data['timestamps'][idx])
+            row = ""
+            total = 0
             for electric_type in self.electric_data_by_type:
                 row += ", %s" % \
                        (sum(self.electric_data_by_type[electric_type][idx:idx + 2]))
+                total += sum(self.electric_data_by_type[electric_type][idx:idx + 2])
+            row = "%s, %s %s" % (str(self.electric_data['timestamps'][idx]), total, row)
             fh.write("%s\n" % row)
         fh.close()
 
